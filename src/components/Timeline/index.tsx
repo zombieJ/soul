@@ -2,7 +2,7 @@ import React from 'react';
 import { InputNumber, Form, Button } from 'antd';
 import Line from './Line';
 
-const styles = require('./index.less');
+import styles from './index.less';
 
 const FormItem = Form.Item;
 
