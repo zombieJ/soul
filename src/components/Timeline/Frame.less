@@ -1,0 +1,20 @@
+@import '~@/styles/common';
+
+.frame {
+  display: inline-block;
+  width: 12px;
+  height: 20px;
+  overflow: hidden;
+  border: 1px solid @border-color;
+  vertical-align: top;
+
+  background: #f4f4f4;
+
+  &:hover {
+    background: blue;
+  }
+
+  &.active {
+    background: red;
+  }
+}

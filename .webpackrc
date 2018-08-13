@@ -1,0 +1,6 @@
+{
+  "typescript": {
+    "reportFiles": ["pages/**/*.{ts,tsx}"],
+    "transpileOnly": false
+  }
+};
