@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import Frame from './Frame';
 
-import styles from './Line.less';
+const styles = require('./Line.less');
 
 export interface LineProps {
   totalFrame: number;
@@ -21,7 +21,7 @@ class Line extends React.Component<LineProps, any> {
     const { totalFrame } = this.props;
 
     const minCount = Math.min(100, totalFrame);
-    const frameList: Array<null> = new Array(minCount).fill(() => null);
+    const frameList: Array<any> = new Array(minCount).fill(null);
 
     return (
       <div className={styles.line}>

@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import classNames from 'classnames';
-import styles from './Frame.less';
+const styles = require('./Frame.less');
 
 export interface FrameProps {
   onSelect: (frame: Frame) => void;

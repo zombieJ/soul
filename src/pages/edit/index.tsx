@@ -6,20 +6,14 @@ export interface EditProps {
 
 }
 
-// class Edit extends React.Component<EditProps, any> {
-//   render() {
-//     return (
-//       <div>
-//         <Timeline />
-//       </div>
-//     );
-//   }
-// }
-
-const Edit = () => (
-  <div>
-    asd
-  </div>
-);
+class Edit extends React.Component<EditProps, any> {
+  render() {
+    return (
+      <div>
+        <Timeline />
+      </div>
+    );
+  }
+}
 
 export default connect()(Edit);

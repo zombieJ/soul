@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { InputNumber, Form, Button } from 'antd';
 import Line from './Line';
 
-import styles from './index.less';
+const styles = require('./index.less');
 
 const FormItem = Form.Item;
 
