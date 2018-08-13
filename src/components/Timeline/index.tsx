@@ -2,12 +2,20 @@ import React from 'react';
 import { InputNumber, Form, Button } from 'antd';
 import Line from './Line';
 
+import { Timeline as TL } from '../../models/movie';
+
 import styles from './index.less';
 
 const FormItem = Form.Item;
 
 export interface TimelineProps {
   form: any;
+  timelineList: Array<TL>;
+  selectedTimeline: number;
+  selectedFrame: number;
+
+  newTimeline: () => void;
+  selectFrame: (timeline: number, frame: number) => void;
 }
 
 class Timeline extends React.Component<TimelineProps, any> {
@@ -19,8 +27,19 @@ class Timeline extends React.Component<TimelineProps, any> {
     });
   }
 
+  selectFrame = (timeline: number, frame: number) => {
+    const { selectFrame } = this.props;
+    if (selectFrame) {
+      selectFrame(timeline, frame);
+    }
+  };
+
   render() {
-    const { form: { getFieldDecorator, getFieldsValue } } = this.props;
+    const {
+      form: { getFieldDecorator, getFieldsValue },
+      timelineList, selectedTimeline, selectedFrame,
+      newTimeline,
+    } = this.props;
 
     const values = getFieldsValue();
 
@@ -37,10 +56,20 @@ class Timeline extends React.Component<TimelineProps, any> {
         </Form>
 
         <div>
-          <Line totalFrame={values.totalFrame || 0} />
+          {timelineList.map((timeline, index) => (
+            <Line
+              key={index}
+              timeline={index}
+              totalFrame={values.totalFrame || 0}
+              selected={selectedTimeline === index}
+              selectedFrame={selectedFrame}
+
+              selectFrame={this.selectFrame}
+            />
+          ))}
         </div>
 
-        <Button>
+        <Button onClick={newTimeline}>
           + new line
         </Button>
       </div>

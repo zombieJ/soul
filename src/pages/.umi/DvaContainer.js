@@ -9,7 +9,7 @@ let app = dva({
 
 window.g_app = app;
 app.use(createLoading());
-
+app.use(require('/Users/jilin/projects/soul/node_modules/_dva-immer@0.2.3@dva-immer/lib/index.js').default());
 app.model({ namespace: 'movie', ...(require('/Users/jilin/projects/soul/src/models/movie.ts').default) });
 
 class DvaContainer extends Component {

@@ -1,5 +1,11 @@
 .line {
-  border: 1px solid green;
+  border: 1px solid gray;
   word-break: keep-all;
   white-space: nowrap;
+  opacity: 0.6;
+
+  &.active {
+    opacity: 1;
+    border: 1px solid green;
+  }
 }

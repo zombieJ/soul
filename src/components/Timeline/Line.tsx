@@ -1,36 +1,45 @@
 import React from 'react';
+import classNames from 'classnames';
 import Frame from './Frame';
 
 const styles = require('./Line.less');
 
 export interface LineProps {
   totalFrame: number;
+  timeline: number;
+  selected: boolean;
+  selectedFrame: number;
+
+  selectFrame: (timeline: number, frame: number) => void;
 }
 
 class Line extends React.Component<LineProps, any> {
-  state = {
-    selected: -1,
-  };
-
   onFrameSelect = ({ props: { index } }: Frame) => {
-    this.setState({ selected: index });
+    const { timeline, selectFrame } = this.props;
+    if (selectFrame) {
+      selectFrame(timeline, index);
+    }
   };
 
   render() {
-    const { selected } = this.state;
-    const { totalFrame } = this.props;
+    const { totalFrame, selectedFrame, selected } = this.props;
 
     const minCount = Math.min(100, totalFrame);
     const frameList: Array<any> = new Array(minCount).fill(null);
 
     return (
-      <div className={styles.line}>
+      <div
+        className={classNames(
+          styles.line,
+          selected && styles.active,
+        )}
+      >
         {frameList.map((_, index) => (
           <Frame
             key={index}
             index={index}
             onSelect={this.onFrameSelect}
-            selected={selected === index}
+            selected={selected && selectedFrame === index}
           />
         ))}
       </div>
