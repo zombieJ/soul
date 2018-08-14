@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { InputNumber, Form, Button } from 'antd';
 import Line from './Line';
 
@@ -16,6 +17,7 @@ export interface TimelineProps {
   selectedTimeline: number;
   selectedFrame: number;
   timelineTitleWidth?: number;
+  className?: string;
 
   newTimeline: () => void;
   selectFrame: (timeline: number, frame: number) => void;
@@ -44,6 +46,7 @@ class Timeline extends React.Component<TimelineProps, any> {
   render() {
     const {
       form: { getFieldDecorator, getFieldsValue },
+      className,
       timelineTitleWidth, timelineList,
       selectedTimeline, selectedFrame,
       newTimeline,
@@ -52,7 +55,7 @@ class Timeline extends React.Component<TimelineProps, any> {
     const values = getFieldsValue();
 
     return (
-      <div className={styles.timeline}>
+      <div className={classNames(styles.timeline, className)}>
         <Form layout="inline">
           <FormItem
             label="Total Frame"

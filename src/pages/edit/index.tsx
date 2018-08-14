@@ -1,10 +1,13 @@
 import * as React from 'react';
 import { connect } from 'dva';
 import Timeline from '../../components/Timeline';
+import Screen from '../../components/Screen';
 import WinEvent from '../../components/WinEvent';
 
 import { Models } from '../../models/$types';
 import { MovieState, FrameType } from '../../models/movie';
+
+import styles from './index.less';
 
 export interface EditProps {
   movie: MovieState,
@@ -47,15 +50,19 @@ class Edit extends React.Component<EditProps, any> {
     const { timelineList } = sceneList[selectedScene];
 
     return (
-      <div>
+      <div className={styles.view}>
         <WinEvent onKeyDown={this.onKeyDown} />
         <Timeline
+          className={styles.timeline}
           timelineList={timelineList}
           selectedTimeline={selectedTimeline}
           selectedFrame={selectedFrame}
 
           newTimeline={this.newTimeline}
           selectFrame={this.selectFrame}
+        />
+        <Screen
+          className={styles.screen}
         />
       </div>
     );
