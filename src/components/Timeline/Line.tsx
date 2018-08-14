@@ -24,7 +24,7 @@ class Line extends React.Component<LineProps, any> {
   render() {
     const { totalFrame, selectedFrame, selected } = this.props;
 
-    const minCount = Math.min(100, totalFrame);
+    const minCount = Math.min(100, totalFrame) || 0;
     const frameList: Array<any> = new Array(minCount).fill(null);
 
     return (

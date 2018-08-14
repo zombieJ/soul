@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'dva';
 import Timeline from '../../components/Timeline';
+import WinEvent from '../../components/WinEvent';
 
 import { Models } from '../../models/$types';
 import { MovieState } from '../../models/movie';
@@ -11,6 +12,10 @@ export interface EditProps {
 }
 
 class Edit extends React.Component<EditProps, any> {
+  onKeyDown = ({ which }: KeyboardEvent) => {
+    console.log('>>>', which);
+  };
+
   newTimeline = () => {
     this.props.dispatch({
       type: 'movie/newTimeline',
@@ -32,6 +37,7 @@ class Edit extends React.Component<EditProps, any> {
 
     return (
       <div>
+        <WinEvent onKeyDown={this.onKeyDown} />
         <Timeline
           timelineList={timelineList}
           selectedTimeline={selectedTimeline}
