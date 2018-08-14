@@ -1,8 +1,32 @@
 import produce from 'immer';
+import Frame from '../components/Timeline/Frame';
+
+export enum FrameType {
+  key = 'key',
+  delete = 'delete',
+}
+
+export interface ShapeBasic {
+  type: string;
+  x: number;
+  y: number;
+  rotate: number;
+  scaleX: number;
+  scaleY: number;
+}
+
+export interface ShapeRect extends ShapeBasic {
+  type: 'rect';
+  width: number;
+  height: number;
+}
+
+export type Shape = ShapeRect;
 
 export interface FrameInfo {
-  start: number,
-  end: number,
+  index: number;
+  type: FrameType;
+  shape: Shape;
 }
 
 export interface Timeline {
@@ -51,6 +75,36 @@ const model: MovieModel = {
         draftState.sceneList[draftState.selectedScene].timelineList.push({
           frameList: [],
         });
+      })
+    ),
+
+    markFrame: (oriState: MovieState, { frameType: type }: { frameType: FrameType }) => (
+      produce(oriState, (draftState: MovieState) => {
+        const { selectedScene, selectedTimeline, selectedFrame } = draftState;
+        const scene = draftState.sceneList[selectedScene];
+        const timeline = scene.timelineList[selectedTimeline];
+        const frameInfo: FrameInfo = {
+          index: selectedFrame,
+          type,
+        };
+
+        const index = timeline.frameList.findIndex((frame) => frame.index >= frameInfo.index);
+        const targetFrame = timeline.frameList[index];
+
+        if (type === FrameType.key) {
+          // key type
+          if (!targetFrame) {
+            timeline.frameList.push(frameInfo);
+          } else if (targetFrame.index === frameInfo.index) {
+            timeline.frameList[index] = frameInfo;
+          } else if (targetFrame) {
+            timeline.frameList.splice(index - 1, 0, frameInfo);
+          }
+        } else if (type === FrameType.delete) {
+          if (targetFrame) {
+            timeline.frameList.splice(index, 1);
+          }
+        }
       })
     ),
   },

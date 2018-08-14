@@ -3,9 +3,21 @@
   word-break: keep-all;
   white-space: nowrap;
   opacity: 0.6;
+  display: flex;
 
   &.active {
     opacity: 1;
     border: 1px solid green;
+  }
+
+  > h5 {
+    flex: none;
+    width: 100px;
+    margin: 0;
+    padding: 0;
+  }
+
+  > .frames {
+    flex: auto;
   }
 }

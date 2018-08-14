@@ -8,17 +8,24 @@ import styles from './index.less';
 
 const FormItem = Form.Item;
 
+const FRAME_WIDTH = 12;
+
 export interface TimelineProps {
   form: any;
   timelineList: Array<TL>;
   selectedTimeline: number;
   selectedFrame: number;
+  timelineTitleWidth?: number;
 
   newTimeline: () => void;
   selectFrame: (timeline: number, frame: number) => void;
 }
 
 class Timeline extends React.Component<TimelineProps, any> {
+  static defaultProps: Partial<TimelineProps> = {
+    timelineTitleWidth: 200,
+  };
+
   componentDidMount() {
     const { form: { setFieldsValue } } = this.props;
 
@@ -37,7 +44,8 @@ class Timeline extends React.Component<TimelineProps, any> {
   render() {
     const {
       form: { getFieldDecorator, getFieldsValue },
-      timelineList, selectedTimeline, selectedFrame,
+      timelineTitleWidth, timelineList,
+      selectedTimeline, selectedFrame,
       newTimeline,
     } = this.props;
 
@@ -59,10 +67,14 @@ class Timeline extends React.Component<TimelineProps, any> {
           {timelineList.map((timeline, index) => (
             <Line
               key={index}
-              timeline={index}
+              timeline={timeline}
+              index={index}
               totalFrame={values.totalFrame || 0}
               selected={selectedTimeline === index}
               selectedFrame={selectedFrame}
+
+              titleWidth={timelineTitleWidth}
+              frameWidth={FRAME_WIDTH}
 
               selectFrame={this.selectFrame}
             />

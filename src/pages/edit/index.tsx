@@ -4,7 +4,7 @@ import Timeline from '../../components/Timeline';
 import WinEvent from '../../components/WinEvent';
 
 import { Models } from '../../models/$types';
-import { MovieState } from '../../models/movie';
+import { MovieState, FrameType } from '../../models/movie';
 
 export interface EditProps {
   movie: MovieState,
@@ -13,6 +13,17 @@ export interface EditProps {
 
 class Edit extends React.Component<EditProps, any> {
   onKeyDown = ({ which }: KeyboardEvent) => {
+    if (which === 192) { // key: `
+      this.props.dispatch({
+        type: 'movie/markFrame',
+        frameType: FrameType.key,
+      });
+    } else if (which === 8) { // key: delete
+    this.props.dispatch({
+      type: 'movie/markFrame',
+      frameType: FrameType.delete,
+    });
+  }
     console.log('>>>', which);
   };
 
@@ -51,8 +62,11 @@ class Edit extends React.Component<EditProps, any> {
   }
 }
 
-const mapState = ({ movie }: Models) => ({
-  movie,
-});
+const mapState = (store: Models) => {
+  (window as any).store = store;
+  return {
+    movie: store.movie,
+  };
+};
 
 export default connect(mapState)(Edit);
