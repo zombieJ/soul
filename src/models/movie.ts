@@ -8,11 +8,14 @@ export enum FrameType {
 
 export interface ShapeBasic {
   type: string;
-  x: number;
-  y: number;
-  rotate: number;
-  scaleX: number;
-  scaleY: number;
+}
+
+export interface ShapeBasicInfo {
+  x?: number;
+  y?: number;
+  rotate?: number;
+  scaleX?: number;
+  scaleY?: number;
 }
 
 export interface ShapeRect extends ShapeBasic {
@@ -26,11 +29,12 @@ export type Shape = ShapeRect;
 export interface FrameInfo {
   index: number;
   type: FrameType;
-  shape: Shape;
+  shapeInfo: ShapeBasicInfo;
 }
 
 export interface Timeline {
   frameList: Array<FrameInfo>,
+  shape: Shape;
 }
 
 export interface Scene {
@@ -54,6 +58,11 @@ const model: MovieModel = {
     sceneList: [{
       timelineList: [{
         frameList: [],
+        shape: {
+          type: 'rect',
+          width: 100,
+          height: 100,
+        },
       }],
     }],
 
@@ -74,6 +83,11 @@ const model: MovieModel = {
       produce(oriState, (draftState: MovieState) => {
         draftState.sceneList[draftState.selectedScene].timelineList.push({
           frameList: [],
+          shape: {
+            type: 'rect',
+            width: 100,
+            height: 100,
+          },
         });
       })
     ),
@@ -86,25 +100,29 @@ const model: MovieModel = {
         const frameInfo: FrameInfo = {
           index: selectedFrame,
           type,
+          shapeInfo: {
+            x: 0,
+            y: 0,
+          },
         };
 
-        const index = timeline.frameList.findIndex((frame) => frame.index >= frameInfo.index);
-        const targetFrame = timeline.frameList[index];
-
+        timeline.frameList = timeline.frameList.filter(frame => frame.index !== frameInfo.index);
         if (type === FrameType.key) {
-          // key type
-          if (!targetFrame) {
-            timeline.frameList.push(frameInfo);
-          } else if (targetFrame.index === frameInfo.index) {
-            timeline.frameList[index] = frameInfo;
-          } else if (targetFrame) {
-            timeline.frameList.splice(index - 1, 0, frameInfo);
-          }
-        } else if (type === FrameType.delete) {
-          if (targetFrame) {
-            timeline.frameList.splice(index, 1);
-          }
+          timeline.frameList.push(frameInfo);
+          timeline.frameList.sort((a, b) => a.index - b.index);
         }
+      })
+    ),
+
+    changeShapeValue: (oriState: MovieState, { name, value }: { name: string, value: any }) => (
+      produce(oriState, (draftState: MovieState) => {
+        const { selectedScene, selectedTimeline, selectedFrame } = draftState;
+        const frameInfo: FrameInfo = draftState
+          .sceneList[selectedScene]
+          .timelineList[selectedTimeline]
+          .frameList.find(frame => frame.index === selectedFrame);
+        
+          frameInfo.shapeInfo[name] = value;
       })
     ),
   },

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'dva';
 import Timeline from '../../components/Timeline';
 import Screen from '../../components/Screen';
+import Props from '../../components/Props';
 import WinEvent from '../../components/WinEvent';
 
 import { Models } from '../../models/$types';
@@ -30,6 +31,14 @@ class Edit extends React.Component<EditProps, any> {
     console.log('>>>', which);
   };
 
+  onValueChange = (name: string, value: any) => {
+    this.props.dispatch({
+      type: 'movie/changeShapeValue',
+      name,
+      value,
+    });
+  };
+
   newTimeline = () => {
     this.props.dispatch({
       type: 'movie/newTimeline',
@@ -49,6 +58,9 @@ class Edit extends React.Component<EditProps, any> {
     const { selectedTimeline, selectedFrame, selectedScene, sceneList } = movie;
     const { timelineList } = sceneList[selectedScene];
 
+    const timeline = timelineList[selectedTimeline];
+    const frameInfo = timeline.frameList.find(frame => frame.index === selectedFrame);
+
     return (
       <div className={styles.view}>
         <WinEvent onKeyDown={this.onKeyDown} />
@@ -61,9 +73,19 @@ class Edit extends React.Component<EditProps, any> {
           newTimeline={this.newTimeline}
           selectFrame={this.selectFrame}
         />
-        <Screen
-          className={styles.screen}
-        />
+        <div className={styles.row}>
+          <Screen
+            className={styles.screen}
+            timelineList={timelineList}
+            frame={selectedFrame}
+          />
+
+          <Props
+            className={styles.props}
+            frameInfo={frameInfo}
+            onValueChange={this.onValueChange}
+          />
+        </div>
       </div>
     );
   }

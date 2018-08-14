@@ -28,12 +28,14 @@ class Line extends React.Component<LineProps, any> {
 
   render() {
     const {
-       totalFrame, selectedFrame, selected, frameWidth,
-        timeline, titleWidth, index: timelineIndex,
-      } = this.props;
+      totalFrame, selectedFrame, selected, frameWidth,
+      timeline, titleWidth, index: timelineIndex,
+    } = this.props;
+
+    const { frameList, shape } = timeline;
 
     const minCount = Math.min(100, totalFrame) || 0;
-    const frameList: Array<any> = new Array(minCount).fill(null);
+    const placeholderFrameList: Array<any> = new Array(minCount).fill(null);
 
     return (
       <div
@@ -43,11 +45,12 @@ class Line extends React.Component<LineProps, any> {
         )}
       >
         <h5 style={{ width: titleWidth }}>
-          {timelineIndex}
+          {/* {timelineIndex} */}
+          {shape.type}
         </h5>
         <div className={styles.frames}>
-          {frameList.map((_, index) => {
-            const frameInfo: FrameInfo = timeline.frameList.find(frame => frame.index === index);
+          {placeholderFrameList.map((_, index) => {
+            const frameInfo: FrameInfo = frameList.find(frame => frame.index === index);
 
             return (
               <Frame
