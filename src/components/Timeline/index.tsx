@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { InputNumber, Button, Icon } from 'antd';
+import { InputNumber, Button, Icon, Slider } from 'antd';
 
 import WinEvent from '../../components/WinEvent';
 import Line from './Line';
@@ -26,7 +26,8 @@ export interface TimelineProps {
 }
 
 export interface TimelineState {
-  frameListWidth: number,
+  displayFrameCount: number,
+  scrollFrame: number,
   play: boolean;
 }
 
@@ -39,7 +40,8 @@ class Timeline extends React.Component<TimelineProps, TimelineState> {
   divRef = React.createRef();
 
   state = {
-    frameListWidth: 0,
+    displayFrameCount: 0,
+    scrollFrame: 0,
     play: false,
   };
 
@@ -62,8 +64,13 @@ class Timeline extends React.Component<TimelineProps, TimelineState> {
     const { timelineTitleWidth } = this.props;
     const { clientWidth } = this.divRef.current as HTMLElement;
     const frameListWidth = clientWidth - timelineTitleWidth;
+    const displayFrameCount = Math.ceil(frameListWidth / FRAME_WIDTH);
     
-    this.setState({ frameListWidth });
+    this.setState({ displayFrameCount });
+  };
+
+  onScrollFrameChange = (scrollFrame: number) => {
+    this.setState({ scrollFrame });
   };
 
   onTriggerAnimation = () => {
@@ -117,7 +124,7 @@ class Timeline extends React.Component<TimelineProps, TimelineState> {
   };
 
   render() {
-    const { play, frameListWidth } = this.state;
+    const { play, displayFrameCount, scrollFrame } = this.state;
     const {
       className, totalFrame,
       timelineTitleWidth, timelineList,
@@ -148,11 +155,16 @@ class Timeline extends React.Component<TimelineProps, TimelineState> {
 
               titleWidth={timelineTitleWidth}
               frameWidth={FRAME_WIDTH}
-              frameListWidth={frameListWidth}
+              displayFrameCount={displayFrameCount}
+              startFrame={scrollFrame}
 
               selectFrame={this.selectFrame}
             />
           ))}
+        </div>
+
+        <div>
+          <Slider min={0} max={totalFrame} value={scrollFrame} onChange={this.onScrollFrameChange} />
         </div>
 
         <div>
