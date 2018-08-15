@@ -1,9 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
 import { InputNumber, Button, Icon } from 'antd';
+
+import WinEvent from '../../components/WinEvent';
 import Line from './Line';
 
-import { Timeline as TL } from '../../models/movie';
+import { Timeline as TL, FrameType } from '../../models/movie';
 
 import styles from './index.less';
 
@@ -20,6 +22,7 @@ export interface TimelineProps {
   newTimeline: () => void;
   selectFrame: (timeline: number, frame: number) => void;
   changeTotalFrame: (totalFrame: number) => void;
+  markFrame: (frameType: FrameType, selectedTimeline: number, selectedFrame: number) => void;
 }
 
 export interface TimelineState {
@@ -40,6 +43,13 @@ class Timeline extends React.Component<TimelineProps, TimelineState> {
   componentWillUnmount() {
     this.removeTimer();
   }
+
+  onKeyDown = ({ which }: KeyboardEvent) => {
+    const { markFrame, selectedTimeline, selectedFrame } = this.props;
+    if (which === 192 && markFrame) { // key: `
+      markFrame(FrameType.key, selectedTimeline, selectedFrame);
+    }
+  };
 
   onTriggerAnimation = () => {
     const { play } = this.state;
@@ -102,6 +112,8 @@ class Timeline extends React.Component<TimelineProps, TimelineState> {
 
     return (
       <div className={classNames(styles.timeline, className)}>
+        <WinEvent onKeyDown={this.onKeyDown} />
+
         <div>
           <label>
             Total Frame:

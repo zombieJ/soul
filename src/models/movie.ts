@@ -94,14 +94,14 @@ const model: MovieModel = {
       })
     ),
 
-    markFrame: (oriState: MovieState, { frameType: type }: { frameType: FrameType }) => (
+    markFrame: (oriState: MovieState, { frameType, selectedTimeline, selectedFrame }: { frameType: FrameType, selectedTimeline: number, selectedFrame: number }) => (
       produce(oriState, (draftState: MovieState) => {
-        const { selectedScene, selectedTimeline, selectedFrame } = draftState;
+        const { selectedScene } = draftState;
         const scene = draftState.sceneList[selectedScene];
         const timeline = scene.timelineList[selectedTimeline];
         const frameInfo: FrameInfo = {
           index: selectedFrame,
-          type,
+          type: frameType,
           shapeInfo: {
             x: 0,
             y: 0,
@@ -110,7 +110,7 @@ const model: MovieModel = {
 
         const matchFrame: FrameInfo = timeline.frameList.find(frame => frame.index === frameInfo.index);
         timeline.frameList = timeline.frameList.filter(frame => frame.index !== frameInfo.index);
-        if (type === FrameType.key && (!matchFrame || matchFrame.type !== frameInfo.type)) {
+        if (frameType === FrameType.key && (!matchFrame || matchFrame.type !== frameInfo.type)) {
           timeline.frameList.push(frameInfo);
           timeline.frameList.sort((a, b) => a.index - b.index);
         }
