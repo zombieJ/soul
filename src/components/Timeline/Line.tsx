@@ -14,6 +14,7 @@ export interface LineProps {
   selectedFrame: number;
   titleWidth: number;
   frameWidth: number;
+  frameListWidth: number;
 
   selectFrame: (timeline: number, frame: number) => void;
 }
@@ -28,13 +29,15 @@ class Line extends React.Component<LineProps, any> {
 
   render() {
     const {
-      totalFrame, selectedFrame, selected, frameWidth,
+      totalFrame, selectedFrame, selected,
+      frameListWidth, frameWidth,
       timeline, titleWidth, index: timelineIndex,
     } = this.props;
 
     const { frameList, shape } = timeline;
 
-    const minCount = Math.min(100, totalFrame) || 0;
+    const maxDisplayCount = Math.ceil(frameListWidth / frameWidth);
+    const minCount = Math.min(maxDisplayCount, totalFrame) || 0;
     const placeholderFrameList: Array<any> = new Array(minCount).fill(null);
 
     return (

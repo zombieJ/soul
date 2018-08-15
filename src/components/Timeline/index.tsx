@@ -26,6 +26,7 @@ export interface TimelineProps {
 }
 
 export interface TimelineState {
+  frameListWidth: number,
   play: boolean;
 }
 
@@ -35,11 +36,17 @@ class Timeline extends React.Component<TimelineProps, TimelineState> {
   };
 
   timer?: NodeJS.Timer = null;
+  divRef = React.createRef();
 
   state = {
+    frameListWidth: 0,
     play: false,
   };
-  
+
+  componentDidMount() {
+    this.onResize();
+  }
+
   componentWillUnmount() {
     this.removeTimer();
   }
@@ -49,6 +56,14 @@ class Timeline extends React.Component<TimelineProps, TimelineState> {
     if (which === 192 && markFrame) { // key: `
       markFrame(FrameType.key, selectedTimeline, selectedFrame);
     }
+  };
+
+  onResize = () => {
+    const { timelineTitleWidth } = this.props;
+    const { clientWidth } = this.divRef.current as HTMLElement;
+    const frameListWidth = clientWidth - timelineTitleWidth;
+    
+    this.setState({ frameListWidth });
   };
 
   onTriggerAnimation = () => {
@@ -102,7 +117,7 @@ class Timeline extends React.Component<TimelineProps, TimelineState> {
   };
 
   render() {
-    const { play } = this.state;
+    const { play, frameListWidth } = this.state;
     const {
       className, totalFrame,
       timelineTitleWidth, timelineList,
@@ -112,7 +127,7 @@ class Timeline extends React.Component<TimelineProps, TimelineState> {
 
     return (
       <div className={classNames(styles.timeline, className)}>
-        <WinEvent onKeyDown={this.onKeyDown} />
+        <WinEvent onKeyDown={this.onKeyDown} onResize={this.onResize} />
 
         <div>
           <label>
@@ -121,7 +136,7 @@ class Timeline extends React.Component<TimelineProps, TimelineState> {
           </label>
         </div>
 
-        <div>
+        <div ref={this.divRef as any}>
           {timelineList.map((timeline, index) => (
             <Line
               key={index}
@@ -133,6 +148,7 @@ class Timeline extends React.Component<TimelineProps, TimelineState> {
 
               titleWidth={timelineTitleWidth}
               frameWidth={FRAME_WIDTH}
+              frameListWidth={frameListWidth}
 
               selectFrame={this.selectFrame}
             />
