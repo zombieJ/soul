@@ -53,10 +53,19 @@ class Edit extends React.Component<EditProps, any> {
     });
   };
 
+  changeTotalFrame = (totalFrame: number) => {
+    const { dispatch, movie: { selectedScene } } = this.props;
+    this.props.dispatch({
+      type: 'movie/changeTotalFrame',
+      selectedScene,
+      totalFrame,
+    });
+  }
+
   render() {
     const { movie } = this.props;
     const { selectedTimeline, selectedFrame, selectedScene, sceneList } = movie;
-    const { timelineList } = sceneList[selectedScene];
+    const { timelineList, totalFrame } = sceneList[selectedScene];
 
     const timeline = timelineList[selectedTimeline];
     const frameInfo = timeline.frameList.find(frame => frame.index === selectedFrame);
@@ -69,9 +78,11 @@ class Edit extends React.Component<EditProps, any> {
           timelineList={timelineList}
           selectedTimeline={selectedTimeline}
           selectedFrame={selectedFrame}
+          totalFrame={totalFrame}
 
           newTimeline={this.newTimeline}
           selectFrame={this.selectFrame}
+          changeTotalFrame={this.changeTotalFrame}
         />
         <div className={styles.row}>
           <Screen

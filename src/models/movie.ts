@@ -39,6 +39,7 @@ export interface Timeline {
 
 export interface Scene {
   timelineList: Array<Timeline>;
+  totalFrame: number;
 }
 
 export interface MovieState {
@@ -56,6 +57,7 @@ export type MovieModel = {
 const model: MovieModel = {
   state: {
     sceneList: [{
+      totalFrame: 25,
       timelineList: [{
         frameList: [],
         shape: {
@@ -115,7 +117,13 @@ const model: MovieModel = {
       })
     ),
 
-    changeShapeValue: (oriState: MovieState, { name, value }: { name: string, value: any }) => (
+    changeTotalFrame: (oriState: MovieState, { totalFrame, selectedScene }: { totalFrame: number, selectedScene: number }) => (
+      produce(oriState, (draftState: MovieState) => {
+        draftState.sceneList[selectedScene].totalFrame = totalFrame;
+      })
+    ),
+
+    changeShapeValue: <K extends keyof ShapeBasicInfo>(oriState: MovieState, { name, value }: { name: K, value: ShapeBasicInfo[K] }) => (
       produce(oriState, (draftState: MovieState) => {
         const { selectedScene, selectedTimeline, selectedFrame } = draftState;
         const frameInfo: FrameInfo = draftState
@@ -123,7 +131,7 @@ const model: MovieModel = {
           .timelineList[selectedTimeline]
           .frameList.find(frame => frame.index === selectedFrame);
 
-          (frameInfo.shapeInfo as any)[name] = value;
+          frameInfo.shapeInfo[name] = value;
       })
     ),
   },

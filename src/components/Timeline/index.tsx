@@ -1,40 +1,61 @@
 import React from 'react';
 import classNames from 'classnames';
-import { InputNumber, Form, Button, Icon } from 'antd';
+import { InputNumber, Button, Icon } from 'antd';
 import Line from './Line';
 
 import { Timeline as TL } from '../../models/movie';
 
 import styles from './index.less';
 
-const FormItem = Form.Item;
-
 const FRAME_WIDTH = 12;
 
 export interface TimelineProps {
-  form: any;
   timelineList: Array<TL>;
   selectedTimeline: number;
   selectedFrame: number;
   timelineTitleWidth?: number;
   className?: string;
+  totalFrame: number;
 
   newTimeline: () => void;
   selectFrame: (timeline: number, frame: number) => void;
+  changeTotalFrame: (totalFrame: number) => void;
 }
 
-class Timeline extends React.Component<TimelineProps, any> {
+export interface TimelineState {
+  play: boolean;
+}
+
+class Timeline extends React.Component<TimelineProps, TimelineState> {
   static defaultProps: Partial<TimelineProps> = {
     timelineTitleWidth: 200,
   };
 
-  componentDidMount() {
-    const { form: { setFieldsValue } } = this.props;
+  timer?: NodeJS.Timer = null;
 
-    setFieldsValue({
-      totalFrame: 25,
-    });
+  state = {
+    play: false,
+  };
+  
+  componentWillUnmount() {
+    this.removeTimer();
   }
+
+  onTriggerAnimation = () => {
+    const { play } = this.state;
+    if (!play) {
+      this.startTimer();
+    } else {
+      this.removeTimer(true);
+    }
+  };
+
+  onTotalFrameChange = (totalFrame: number) => {
+    const { changeTotalFrame } = this.props;
+    if (changeTotalFrame) {
+      changeTotalFrame(totalFrame);
+    }
+  };
 
   selectFrame = (timeline: number, frame: number) => {
     const { selectFrame } = this.props;
@@ -43,28 +64,50 @@ class Timeline extends React.Component<TimelineProps, any> {
     }
   };
 
+  // Timer
+  startTimer = () => {
+    this.setState({
+      play: true,
+    });
+
+    this.removeTimer();
+    this.timer = setInterval(() => {
+      const { selectedTimeline, selectedFrame, selectFrame, totalFrame } = this.props;
+
+      if (selectFrame) {
+        selectFrame(selectedTimeline, (selectedFrame + 1) % totalFrame);
+      }
+    }, 1000 / 30); // 30 frames per second
+  };
+
+  removeTimer = (changeState?: boolean) => {
+    if (changeState) {
+      this.setState({
+        play: false,
+      });
+    }
+
+    clearInterval(this.timer);
+    this.timer = null;
+  };
+
   render() {
+    const { play } = this.state;
     const {
-      form: { getFieldDecorator, getFieldsValue },
-      className,
+      className, totalFrame,
       timelineTitleWidth, timelineList,
       selectedTimeline, selectedFrame,
       newTimeline,
     } = this.props;
 
-    const values = getFieldsValue();
-
     return (
       <div className={classNames(styles.timeline, className)}>
-        <Form layout="inline">
-          <FormItem
-            label="Total Frame"
-          >
-            {getFieldDecorator('totalFrame')(
-              <InputNumber />
-            )}
-          </FormItem>
-        </Form>
+        <div>
+          <label>
+            Total Frame:
+            <InputNumber value={totalFrame} onChange={this.onTotalFrameChange} />
+          </label>
+        </div>
 
         <div>
           {timelineList.map((timeline, index) => (
@@ -72,7 +115,7 @@ class Timeline extends React.Component<TimelineProps, any> {
               key={index}
               timeline={timeline}
               index={index}
-              totalFrame={values.totalFrame || 0}
+              totalFrame={totalFrame}
               selected={selectedTimeline === index}
               selectedFrame={selectedFrame}
 
@@ -86,8 +129,8 @@ class Timeline extends React.Component<TimelineProps, any> {
 
         <div>
           <div className={styles.controller}>
-            <Button>
-              <Icon type="caret-right" />
+            <Button onClick={this.onTriggerAnimation}>
+              <Icon type={play ? 'pause' : 'caret-right'} />
             </Button>
           </div>
 
@@ -100,4 +143,4 @@ class Timeline extends React.Component<TimelineProps, any> {
   }
 }
 
-export default Form.create()(Timeline);
+export default Timeline;
