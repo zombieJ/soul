@@ -37,7 +37,7 @@ class Timeline extends React.Component<TimelineProps, TimelineState> {
   };
 
   timer?: NodeJS.Timer = null;
-  divRef = React.createRef();
+  divRef: React.RefObject<HTMLDivElement> = React.createRef();
 
   state = {
     displayFrameCount: 0,
@@ -143,7 +143,7 @@ class Timeline extends React.Component<TimelineProps, TimelineState> {
           </label>
         </div>
 
-        <div ref={this.divRef as any}>
+        <div ref={this.divRef}>
           {timelineList.map((timeline, index) => (
             <Line
               key={index}

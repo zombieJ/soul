@@ -11,6 +11,11 @@ export interface ShapeRect extends ShapeBasic {
   height: number;
 }
 
+export const ShapeRectProps = {
+  width: 'number',
+  height: 'number',
+};
+
 export interface RectProps {
   shape: ShapeRect;
   prevFrame: FrameInfo;

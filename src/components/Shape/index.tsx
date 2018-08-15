@@ -1,4 +1,4 @@
-import { ShapeRect } from './Rect';
+import { ShapeRect, ShapeRectProps } from './Rect';
 
 export interface ShapeBasicInfo {
   x: number;
@@ -9,10 +9,9 @@ export interface ShapeBasicInfo {
   opacity: number;
 }
 
-export const ShapeTypeList = [
-  'rect',
-  'circle',
-];
+export const Shapes = {
+  rect: ShapeRectProps,
+};
 
 export interface ShapeBasic {
   type: string;

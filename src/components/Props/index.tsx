@@ -2,8 +2,10 @@ import React from 'react';
 import { Form, InputNumber, Input, Select } from 'antd';
 import classNames from 'classnames';
 
-import { Shape, ShapeTypeList } from '../../components/Shape';
+import { Shape, Shapes } from '../../components/Shape';
 import { FrameInfo, Timeline } from '../../models/movie';
+
+import Field from './Field';
 
 import styles from './index.less';
 
@@ -32,30 +34,33 @@ class Props extends React.Component<PropsProps, any> {
     const shape: Shape = timeline.shape;
 
     // ======================= Shape =======================
-    const keyList: Array<string> = Object.keys(shape).filter(key => key !== 'type');
+    const shapeProps = Shapes[shape.type];
+    const keyList: Array<string> = Object.keys(shapeProps);
 
     const $shape = (
       <div className={styles.region}>
         <h2>Shape</h2>
 
-        <label>
-          type:
-          <Select value={shape.type} onChange={(value) => { this.onShapeChange('type', value); }}>
-            {ShapeTypeList.map(type => (
-              <Select.Option key={type} value={type}>
-                {type}
-              </Select.Option>
-            ))}
-          </Select>
-        </label>
+        <Field
+          name="type"
+          type="string"
+          value={shape.type}
+          list={Object.keys(Shapes)}
+          onChange={this.onShapeChange}
+        />
 
         {keyList.map((key) => {
-          const value: string = (shape as any)[key];
+          const type: any = (shapeProps as any)[key];
+          const value: any = (shape as any)[key];
+
           return (
-            <label key={key}>
-              {key}:
-              <Input value={value} onChange={({ target: { value } }) => { this.onShapeChange(key, value); }} />
-            </label>
+            <Field
+              key={key}
+              name={key}
+              type={type}
+              value={value}
+              onChange={this.onShapeChange}
+            />
           );
         })}
       </div>

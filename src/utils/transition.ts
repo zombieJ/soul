@@ -1,4 +1,4 @@
-export function framePTG(start: number, end: number, current: number) {
+export function framePTG(start: number = 0, end: number = 0, current: number) {
   if (start === end) return 0;
 
   return (current - start) / (end - start);
