@@ -23,6 +23,14 @@ class Edit extends React.Component<EditProps, any> {
     });
   };
 
+  onShapeChange = (name: string, value: any) => {
+    this.props.dispatch({
+      type: 'movie/changeShapeCommonValue',
+      name,
+      value,
+    });
+  };
+
   newTimeline = () => {
     this.props.dispatch({
       type: 'movie/newTimeline',
@@ -86,8 +94,10 @@ class Edit extends React.Component<EditProps, any> {
 
           <Props
             className={styles.props}
+            timeline={timeline}
             frameInfo={frameInfo}
             onValueChange={this.onValueChange}
+            onShapeChange={this.onShapeChange}
           />
         </div>
       </div>

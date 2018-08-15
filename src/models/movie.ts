@@ -1,31 +1,11 @@
 import produce from 'immer';
-import Frame from '../components/Timeline/Frame';
+import { Shape, ShapeBasicInfo } from '../components/Shape';
+import { toNum } from '../utils/to';
 
 export enum FrameType {
   key = 'key',
   delete = 'delete',
 }
-
-export interface ShapeBasic {
-  type: string;
-}
-
-export interface ShapeBasicInfo {
-  x: number;
-  y: number;
-  rotate: number;
-  scaleX: number;
-  scaleY: number;
-  opacity: number;
-}
-
-export interface ShapeRect extends ShapeBasic {
-  type: 'rect';
-  width: number;
-  height: number;
-}
-
-export type Shape = ShapeRect;
 
 export interface FrameInfo {
   index: number;
@@ -145,6 +125,17 @@ const model: MovieModel = {
           .frameList.find(frame => frame.index === selectedFrame);
 
           frameInfo.shapeInfo[name] = value;
+      })
+    ),
+
+    changeShapeCommonValue: <K extends keyof Shape>(oriState: MovieState, { name, value }: { name: K, value: Shape[K] }) => (
+      produce(oriState, (draftState: MovieState) => {
+        const { selectedScene, selectedTimeline } = draftState;
+        const timeline: Timeline = draftState
+          .sceneList[selectedScene]
+          .timelineList[selectedTimeline];
+
+          timeline.shape[name] = toNum(value);
       })
     ),
   },

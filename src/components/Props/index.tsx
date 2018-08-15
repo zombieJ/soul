@@ -1,8 +1,9 @@
 import React from 'react';
-import { Form, InputNumber } from 'antd';
+import { Form, InputNumber, Input } from 'antd';
 import classNames from 'classnames';
 
-import { FrameInfo } from '../../models/movie';
+import { Shape } from '../../components/Shape';
+import { FrameInfo, Timeline } from '../../models/movie';
 
 import styles from './index.less';
 
@@ -10,8 +11,10 @@ const FormItem = Form.Item;
 
 export interface PropsProps {
   className?: string;
+  timeline: Timeline;
   frameInfo: FrameInfo;
   onValueChange: (name: string, value: any) => void;
+  onShapeChange: (name: string, value: any) => void;
 }
 
 class Props extends React.Component<PropsProps, any> {
@@ -19,11 +22,16 @@ class Props extends React.Component<PropsProps, any> {
     this.props.onValueChange(name, value);
   };
 
+  onShapeChange = (name: string, value: any) => {
+    this.props.onShapeChange(name, value);
+  };
+
   render() {
-    const { className, frameInfo } = this.props;
+    const { className, frameInfo, timeline } = this.props;
+
+    const shape: Shape = timeline.shape;
 
     let $content;
-
     if (frameInfo) {
       $content = (
         <div className={styles.region}>
@@ -57,8 +65,6 @@ class Props extends React.Component<PropsProps, any> {
             opacity:
             <InputNumber value={frameInfo.shapeInfo.opacity} onChange={(val) => { this.onValueChange('opacity', val); }} />
           </label>
-
-          <h2>Shape</h2>
         </div>
       );
     } else {
@@ -69,6 +75,20 @@ class Props extends React.Component<PropsProps, any> {
 
     return (
       <div className={classNames(className, styles.props)}>
+        <div className={styles.region}>
+            <h2>Shape</h2>
+
+            {Object.keys(shape).map((key) => {
+              const value: string = (shape as any)[key];
+              return (
+                <label key={key}>
+                  {key}:
+                  <Input value={value} onChange={({ target: { value } }) => { this.onShapeChange(key, value); }} />
+                </label>
+              );
+            })}
+          </div>
+
         {$content}
       </div>
     );

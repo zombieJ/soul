@@ -1,7 +1,15 @@
 import React from 'react';
 
-import { ShapeRect, ShapeBasicInfo, FrameInfo } from '../../models/movie';
+import { FrameInfo } from '../../models/movie';
 import { framePTG, transNumber } from '../../utils/transition';
+
+import { ShapeBasicInfo, ShapeBasic } from './index';
+
+export interface ShapeRect extends ShapeBasic {
+  type: 'rect';
+  width: number;
+  height: number;
+}
 
 export interface RectProps {
   shape: ShapeRect;
