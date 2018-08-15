@@ -16,6 +16,7 @@ export interface ShapeBasicInfo {
   rotate?: number;
   scaleX?: number;
   scaleY?: number;
+  opacity?: number;
 }
 
 export interface ShapeRect extends ShapeBasic {
@@ -105,6 +106,10 @@ const model: MovieModel = {
           shapeInfo: {
             x: 0,
             y: 0,
+            rotate: 0,
+            scaleX: 1,
+            scaleY: 1,
+            opacity: 1,
           },
         };
 

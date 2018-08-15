@@ -15,6 +15,11 @@ const Rect = ({ prevFrame, curFrame, shape, frame }: RectProps) => {
   const csi: ShapeBasicInfo = curFrame.shapeInfo;
   const ptg: number = framePTG(prevFrame.index, curFrame.index, frame);
 
+  const rotate: number = transNumber(psi.rotate, csi.rotate, ptg);
+  const scaleX: number = transNumber(psi.scaleX, csi.scaleX, ptg);
+  const scaleY: number = transNumber(psi.scaleY, csi.scaleY, ptg);
+  const opacity: number = transNumber(psi.opacity, csi.opacity, ptg);
+
   return (
     <div
       style={{
@@ -22,6 +27,8 @@ const Rect = ({ prevFrame, curFrame, shape, frame }: RectProps) => {
         border: '1px solid red',
         left: transNumber(psi.x, csi.x, ptg),
         top: transNumber(psi.y, csi.y, ptg),
+        transform: `rotate(${rotate}deg) scale(${scaleX}, ${scaleY})`,
+        opacity,
         height: shape.height,
         width: shape.width,
       }}

@@ -26,7 +26,8 @@ class Props extends React.Component<PropsProps, any> {
 
     if (frameInfo) {
       $content = (
-        <div>
+        <div className={styles.region}>
+          <h2>Basic</h2>
           <label>
             x:
             <InputNumber value={frameInfo.shapeInfo.x} onChange={(val) => { this.onValueChange('x', val); }} />
@@ -36,6 +37,28 @@ class Props extends React.Component<PropsProps, any> {
             y:
             <InputNumber value={frameInfo.shapeInfo.y} onChange={(val) => { this.onValueChange('y', val); }} />
           </label>
+
+          <label>
+            rotate:
+            <InputNumber value={frameInfo.shapeInfo.rotate} onChange={(val) => { this.onValueChange('rotate', val); }} />
+          </label>
+
+           <label>
+            scaleX:
+            <InputNumber value={frameInfo.shapeInfo.scaleX} onChange={(val) => { this.onValueChange('scaleX', val); }} />
+          </label>
+
+           <label>
+            scaleY:
+            <InputNumber value={frameInfo.shapeInfo.scaleY} onChange={(val) => { this.onValueChange('scaleY', val); }} />
+          </label>
+
+           <label>
+            opacity:
+            <InputNumber value={frameInfo.shapeInfo.opacity} onChange={(val) => { this.onValueChange('opacity', val); }} />
+          </label>
+
+          <h2>Shape</h2>
         </div>
       );
     } else {
