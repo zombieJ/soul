@@ -9,10 +9,10 @@ export interface ShapeBasicInfo {
   opacity: number;
 }
 
-export enum ShapeType {
-  rect = 'rect',
-  circle = 'circle',
-}
+export const ShapeTypeList = [
+  'rect',
+  'circle',
+];
 
 export interface ShapeBasic {
   type: string;

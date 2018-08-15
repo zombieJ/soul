@@ -1,8 +1,9 @@
 import React from 'react';
 import classNames from 'classnames';
 
+import { Shape } from '../../components/Shape';
 import Rect from '../../components/Shape/Rect';
-import { Timeline, FrameInfo, Shape } from '../../models/movie';
+import { Timeline, FrameInfo } from '../../models/movie';
 
 import styles from './index.less';
 

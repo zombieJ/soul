@@ -1,8 +1,8 @@
 import React from 'react';
-import { Form, InputNumber, Input } from 'antd';
+import { Form, InputNumber, Input, Select } from 'antd';
 import classNames from 'classnames';
 
-import { Shape } from '../../components/Shape';
+import { Shape, ShapeTypeList } from '../../components/Shape';
 import { FrameInfo, Timeline } from '../../models/movie';
 
 import styles from './index.less';
@@ -31,6 +31,37 @@ class Props extends React.Component<PropsProps, any> {
 
     const shape: Shape = timeline.shape;
 
+    // ======================= Shape =======================
+    const keyList: Array<string> = Object.keys(shape).filter(key => key !== 'type');
+
+    const $shape = (
+      <div className={styles.region}>
+        <h2>Shape</h2>
+
+        <label>
+          type:
+          <Select value={shape.type} onChange={(value) => { this.onShapeChange('type', value); }}>
+            {ShapeTypeList.map(type => (
+              <Select.Option key={type} value={type}>
+                {type}
+              </Select.Option>
+            ))}
+          </Select>
+        </label>
+
+        {keyList.map((key) => {
+          const value: string = (shape as any)[key];
+          return (
+            <label key={key}>
+              {key}:
+              <Input value={value} onChange={({ target: { value } }) => { this.onShapeChange(key, value); }} />
+            </label>
+          );
+        })}
+      </div>
+    );
+
+    // ====================== Content ======================
     let $content;
     if (frameInfo) {
       $content = (
@@ -75,20 +106,7 @@ class Props extends React.Component<PropsProps, any> {
 
     return (
       <div className={classNames(className, styles.props)}>
-        <div className={styles.region}>
-            <h2>Shape</h2>
-
-            {Object.keys(shape).map((key) => {
-              const value: string = (shape as any)[key];
-              return (
-                <label key={key}>
-                  {key}:
-                  <Input value={value} onChange={({ target: { value } }) => { this.onShapeChange(key, value); }} />
-                </label>
-              );
-            })}
-          </div>
-
+        {$shape}
         {$content}
       </div>
     );
@@ -96,7 +114,3 @@ class Props extends React.Component<PropsProps, any> {
 }
 
 export default Props;
-
-// const WrappedProps = Form.create()(Props as any);
-
-// export default WrappedProps as any;
