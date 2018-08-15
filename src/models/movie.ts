@@ -11,12 +11,12 @@ export interface ShapeBasic {
 }
 
 export interface ShapeBasicInfo {
-  x?: number;
-  y?: number;
-  rotate?: number;
-  scaleX?: number;
-  scaleY?: number;
-  opacity?: number;
+  x: number;
+  y: number;
+  rotate: number;
+  scaleX: number;
+  scaleY: number;
+  opacity: number;
 }
 
 export interface ShapeRect extends ShapeBasic {
@@ -118,6 +118,14 @@ const model: MovieModel = {
         if (frameType === FrameType.key && (!matchFrame || matchFrame.type !== frameInfo.type)) {
           timeline.frameList.push(frameInfo);
           timeline.frameList.sort((a, b) => a.index - b.index);
+
+          const currentIndex = timeline.frameList.findIndex(frame => frame === frameInfo);
+          const prevFrame = timeline.frameList[currentIndex - 1];
+          if (prevFrame) {
+            frameInfo.shapeInfo = {
+              ...prevFrame.shapeInfo,
+            };
+          }
         }
       })
     ),
