@@ -164,7 +164,7 @@ class Timeline extends React.Component<TimelineProps, TimelineState> {
         </div>
 
         <div>
-          <Slider min={0} max={totalFrame} value={scrollFrame} onChange={this.onScrollFrameChange} />
+          <Slider min={0} max={Math.max(0, (totalFrame || 0) - 1)} value={scrollFrame} onChange={this.onScrollFrameChange} />
         </div>
 
         <div>

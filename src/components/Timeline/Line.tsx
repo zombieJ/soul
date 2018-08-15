@@ -61,12 +61,12 @@ class Line extends React.Component<LineProps, any> {
 
             return (
               <Frame
-                key={index}
-                index={index}
+                key={frameIndex}
+                index={frameIndex}
                 frame={frameInfo}
                 width={frameWidth}
                 onSelect={this.onFrameSelect}
-                selected={selected && selectedFrame === index}
+                selected={selected && selectedFrame === frameIndex}
               />
             );
           })}
