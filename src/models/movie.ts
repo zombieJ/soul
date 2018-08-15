@@ -106,8 +106,9 @@ const model: MovieModel = {
           },
         };
 
+        const matchFrame: FrameInfo = timeline.frameList.find(frame => frame.index === frameInfo.index);
         timeline.frameList = timeline.frameList.filter(frame => frame.index !== frameInfo.index);
-        if (type === FrameType.key) {
+        if (type === FrameType.key && (!matchFrame || matchFrame.type !== frameInfo.type)) {
           timeline.frameList.push(frameInfo);
           timeline.frameList.sort((a, b) => a.index - b.index);
         }
@@ -121,8 +122,8 @@ const model: MovieModel = {
           .sceneList[selectedScene]
           .timelineList[selectedTimeline]
           .frameList.find(frame => frame.index === selectedFrame);
-        
-          frameInfo.shapeInfo[name] = value;
+
+          (frameInfo.shapeInfo as any)[name] = value;
       })
     ),
   },

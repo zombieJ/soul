@@ -22,12 +22,12 @@ class Edit extends React.Component<EditProps, any> {
         type: 'movie/markFrame',
         frameType: FrameType.key,
       });
-    } else if (which === 8) { // key: delete
-    this.props.dispatch({
-      type: 'movie/markFrame',
-      frameType: FrameType.delete,
-    });
-  }
+    // } else if (which === 8) { // key: delete
+    //   this.props.dispatch({
+    //     type: 'movie/markFrame',
+    //     frameType: FrameType.delete,
+    //   });
+    }
     console.log('>>>', which);
   };
 

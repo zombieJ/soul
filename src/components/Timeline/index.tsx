@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { InputNumber, Form, Button } from 'antd';
+import { InputNumber, Form, Button, Icon } from 'antd';
 import Line from './Line';
 
 import { Timeline as TL } from '../../models/movie';
@@ -84,9 +84,17 @@ class Timeline extends React.Component<TimelineProps, any> {
           ))}
         </div>
 
-        <Button onClick={newTimeline}>
-          + new line
-        </Button>
+        <div>
+          <div className={styles.controller}>
+            <Button>
+              <Icon type="caret-right" />
+            </Button>
+          </div>
+
+          <Button onClick={newTimeline}>
+            + new line
+          </Button>
+        </div>
       </div>
     );
   }
