@@ -9,6 +9,15 @@ export interface ShapeBasicInfo {
   opacity: number;
 }
 
+export const ShapeBasicProps = {
+  x: 'number',
+  y: 'number',
+  rotate: 'number',
+  scaleX: 'number',
+  scaleY: 'number',
+  opacity: 'number',
+}
+
 export const Shapes = {
   rect: ShapeRectProps,
 };

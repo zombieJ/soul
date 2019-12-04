@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, InputNumber, Input, Select } from 'antd';
 import classNames from 'classnames';
 
-import { Shape, Shapes } from '../../components/Shape';
+import { Shape, Shapes, ShapeBasicProps } from '../../components/Shape';
 import { FrameInfo, Timeline } from '../../models/movie';
 
 import Field from './Field';
@@ -72,35 +72,16 @@ class Props extends React.Component<PropsProps, any> {
       $content = (
         <div className={styles.region}>
           <h2>Basic</h2>
-          <label>
-            x:
-            <InputNumber value={frameInfo.shapeInfo.x} onChange={(val) => { this.onValueChange('x', val); }} />
-          </label>
 
-          <label>
-            y:
-            <InputNumber value={frameInfo.shapeInfo.y} onChange={(val) => { this.onValueChange('y', val); }} />
-          </label>
-
-          <label>
-            rotate:
-            <InputNumber value={frameInfo.shapeInfo.rotate} onChange={(val) => { this.onValueChange('rotate', val); }} />
-          </label>
-
-           <label>
-            scaleX:
-            <InputNumber value={frameInfo.shapeInfo.scaleX} onChange={(val) => { this.onValueChange('scaleX', val); }} />
-          </label>
-
-           <label>
-            scaleY:
-            <InputNumber value={frameInfo.shapeInfo.scaleY} onChange={(val) => { this.onValueChange('scaleY', val); }} />
-          </label>
-
-           <label>
-            opacity:
-            <InputNumber value={frameInfo.shapeInfo.opacity} onChange={(val) => { this.onValueChange('opacity', val); }} />
-          </label>
+          {Object.keys(ShapeBasicProps).map(key => (
+            <Field
+              key={key}
+              name={key}
+              type={(ShapeBasicProps as any)[key]}
+              value={(frameInfo.shapeInfo as any)[key]}
+              onChange={this.onValueChange}
+            />
+          ))}
         </div>
       );
     } else {
